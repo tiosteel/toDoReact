@@ -51,26 +51,79 @@
         constructor(props, context) {
             super(props, context);
 
-
-            ["handleAddTask", "handleAddTaskInputChange"].forEach(sEventName => {
-                this[sEventName] = this[sEventName].bind(this);
-            });
-
             this.state = {
                 inputValue: "",
-                buttonDisabled: true
+                buttonDisabled: true,
+                currentTasks: JSON.parse(localStorage.getItem("currentTasks")) || []
             }
         }
 
         handleAddTaskInputChange(event) {
             this.setState({
                 inputValue: event.target.value,
-                buttonDisabled: (event.target.value.length < 1) ? true : false
+                buttonDisabled: (event.target.value.length < 1)
             });
         }
 
+        handleAddTaskKeyUp(event) {
+            if (event.key === "Enter") {
+                this.handleAddTask();
+            }
+        }
+
         handleAddTask() {
-            ReactBootstrap.Alert(arguments);
+            if (this.state.inputValue.length > 0) {
+                const aCurrentTasks = this.state.currentTasks;
+                aCurrentTasks.unshift({
+                    name: this.state.inputValue,
+                    completed: false
+                });
+                this.setState({currentTasks: aCurrentTasks});
+                this.saveCurrentTasks();
+
+                this.handleAddTaskInputChange({target: {value: ""}});
+            }
+        }
+
+        saveCurrentTasks(){
+            localStorage.setItem("currentTasks", JSON.stringify(this.state.currentTasks));
+        }
+
+        handleCompleteTask(iIndex, event) {
+            if (!this.state.currentTasks[iIndex].completed){
+                const aCurrentTasks = this.state.currentTasks;
+                aCurrentTasks[iIndex].completed = true;
+
+                const oSpliced = aCurrentTasks.splice(iIndex, 1);
+                aCurrentTasks.push(oSpliced[0]);
+                this.setState({currentTasks: aCurrentTasks});
+
+                this.saveCurrentTasks();
+            }
+        }
+
+        handleRestoreTask(iIndex, event){
+            if (this.state.currentTasks[iIndex].completed){
+                const aCurrentTasks = this.state.currentTasks;
+                aCurrentTasks[iIndex].completed = false;
+
+                const oSpliced = this.state.currentTasks.splice(iIndex, 1);
+                aCurrentTasks.unshift(oSpliced[0]);
+                this.setState({currentTasks: aCurrentTasks});
+
+                this.saveCurrentTasks();
+            }
+        }
+
+        handleDeleteTask(iIndex, event){
+            //@todo raise confirm window
+            if (this.state.currentTasks[iIndex]){
+                const aCurrentTasks = this.state.currentTasks;
+                aCurrentTasks.splice(iIndex, 1);
+                this.setState({currentTasks: aCurrentTasks});
+
+                this.saveCurrentTasks();
+            }
         }
 
         render() {
@@ -97,11 +150,12 @@
                                                         type="text"
                                                         value={this.state.inputValue}
                                                         placeholder="Enter task"
-                                                        onChange={this.handleAddTaskInputChange}
+                                                        onChange={(event) => this.handleAddTaskInputChange(event)}
+                                                        onKeyUp={(event) => this.handleAddTaskKeyUp(event)}
                                                 />
                                             </FormGroup>{' '}
                                             <Button bsStyle="primary" disabled={this.state.buttonDisabled}
-                                                    onClick={this.handleAddTask}>Add</Button>
+                                                    onClick={(event) => this.handleAddTask(event)}>Add</Button>
                                         </Navbar.Form>
                                     </Navbar.Collapse>
                                 </Col>
@@ -109,10 +163,22 @@
                         </Navbar>
                         <Grid>
                             <ListGroup>
-                                <ListGroupItem color="success">Cras justo odio</ListGroupItem>
-                                <ListGroupItem color="info">Dapibus ac facilisis in</ListGroupItem>
-                                <ListGroupItem color="warning">Morbi leo risus</ListGroupItem>
-                                <ListGroupItem color="danger">Porta ac consectetur ac</ListGroupItem>
+                                {this.state.currentTasks.map((oTask, iIndex) =>
+                                        <ListGroupItem key={iIndex}>
+                                            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                                                <span style={{textDecoration: (oTask.completed) ? 'line-through' : 'None'}}>
+                                                    {oTask.name}
+                                                </span>
+                                                <span>
+                                                    <Button style={{display: (oTask.completed) ? 'None': 'Inline-block'}} bsStyle="success"
+                                                            onClick={(event) => this.handleCompleteTask(iIndex, event)}>Complete</Button>
+                                                    <Button style={{display: (oTask.completed) ? 'Inline-block': 'None'}} bsStyle="warning"
+                                                            onClick={(event) => this.handleRestoreTask(iIndex, event)}>Restore</Button>{' '}
+                                                    <Button bsStyle="danger" onClick={(event) => this.handleDeleteTask(iIndex, event)}>Delete</Button>
+                                                </span>
+                                            </div>
+                                        </ListGroupItem>
+                                )}
                             </ListGroup>
                         </Grid>
                     </div>
@@ -123,7 +189,6 @@
     // Use the ReactDOM.render to show your component on the browser
     ReactDOM.render(<ToDoApp/>, document.getElementById('root'))
 </script>
-
 
 </body>
 
