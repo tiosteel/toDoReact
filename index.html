@@ -116,8 +116,8 @@
         }
 
         handleDeleteTask(iIndex, event){
-            //@todo raise confirm window
-            if (this.state.currentTasks[iIndex]){
+            //@todo beauty raise confirm window
+            if (this.state.currentTasks[iIndex] && confirm("Are you sure?")) {
                 const aCurrentTasks = this.state.currentTasks;
                 aCurrentTasks.splice(iIndex, 1);
                 this.setState({currentTasks: aCurrentTasks});
