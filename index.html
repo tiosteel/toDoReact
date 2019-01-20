@@ -8,17 +8,25 @@
     <title>React ToDo App</title>
 
     <!-- Import the React, React-Dom and Babel libraries from unpkg -->
-    <script type="application/javascript" src="https://unpkg.com/react@latest/umd/react.production.min.js"></script>
+
+    <!--minified-->
+    <!--<script type="application/javascript" src="https://unpkg.com/react@latest/umd/react.production.min.js"></script>-->
+    <!--<script type="application/javascript"-->
+    <!--src="https://unpkg.com/react-dom@latest/umd/react-dom.production.min.js"></script>-->
+
+    <!--non-minified-->
+    <script type="application/javascript" src="https://unpkg.com/react@latest/umd/react.development.js"></script>
     <script type="application/javascript"
-            src="https://unpkg.com/react-dom@latest/umd/react-dom.production.min.js"></script>
+            src="https://unpkg.com/react-dom@latest/umd/react-dom.development.js"></script>
+
     <script type="application/javascript" src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
 
+    <!-- Import the Bootstrap component libraries from cloudflare -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.32.4/react-bootstrap.min.js"></script>
+
     <!-- Import latest compiled and minified CSS -->
-    <link
-            rel="stylesheet"
-            href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"
-            crossorigin="anonymous"
-    />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
     <link rel="shortcut icon" type="image/x-icon" media="all" href="favicon.ico">
 </head>
@@ -27,39 +35,93 @@
 <body>
 <div id="root"></div>
 
-<!-- Import the Bootstrap component libraries from unpkg -->
-<!-- It placed not in <head></head> due to strange bug -->
-<!-- https://github.com/react-bootstrap/react-bootstrap/issues/849 -->
-<script
-        src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js"
-        crossorigin>
-</script>
-
 <script type="text/babel">
     const Navbar = ReactBootstrap.Navbar,
-        NavItem = ReactBootstrap.NavItem;
+        Grid = ReactBootstrap.Grid,
+        Row = ReactBootstrap.Row,
+        Col = ReactBootstrap.Col,
+        ListGroup = ReactBootstrap.ListGroup,
+        ListGroupItem = ReactBootstrap.ListGroupItem,
+        FormGroup = ReactBootstrap.FormGroup,
+        FormControl = ReactBootstrap.FormControl,
+        Button = ReactBootstrap.Button;
 
-    // Create a function to wrap up your component
-    function App() {
-        return (
-                <div>
-                    <Navbar bg="light">
-                        <Navbar.Brand href="#home">
-                            <img
-                                    src="Wiley-logo.png"
-                                    width="30"
-                                    height="30"
-                                    className="d-inline-block align-top"
-                                    alt="React Bootstrap logo"
-                            />
-                        </Navbar.Brand>
-                    </Navbar>
-                </div>
-        )
+    class ToDoApp extends React.Component {
+
+        constructor(props, context) {
+            super(props, context);
+
+
+            ["handleAddTask", "handleAddTaskInputChange"].forEach(sEventName => {
+                this[sEventName] = this[sEventName].bind(this);
+            });
+
+            this.state = {
+                inputValue: "",
+                buttonDisabled: true
+            }
+        }
+
+        handleAddTaskInputChange(event) {
+            this.setState({
+                inputValue: event.target.value,
+                buttonDisabled: (event.target.value.length < 1) ? true : false
+            });
+        }
+
+        handleAddTask() {
+            ReactBootstrap.Alert(arguments);
+        }
+
+        render() {
+            return (
+                    <div>
+                        <Navbar bg="light" expanded="true">
+                            <Grid>
+                                <Col>
+                                    <Navbar.Header>
+                                        <Navbar.Brand>
+                                            <a href="/">
+                                                <img src="Wiley-logo.png" width="20" height="20"
+                                                     alt="React Bootstrap logo"/>
+                                            </a>
+                                        </Navbar.Brand>
+                                        <Navbar.Brand>
+                                            <a href="/">React ToDo App</a>
+                                        </Navbar.Brand>
+                                    </Navbar.Header>
+                                    <Navbar.Collapse>
+                                        <Navbar.Form pullRight>
+                                            <FormGroup>
+                                                <FormControl
+                                                        type="text"
+                                                        value={this.state.inputValue}
+                                                        placeholder="Enter task"
+                                                        onChange={this.handleAddTaskInputChange}
+                                                />
+                                            </FormGroup>{' '}
+                                            <Button bsStyle="primary" disabled={this.state.buttonDisabled}
+                                                    onClick={this.handleAddTask}>Add</Button>
+                                        </Navbar.Form>
+                                    </Navbar.Collapse>
+                                </Col>
+                            </Grid>
+                        </Navbar>
+                        <Grid>
+                            <ListGroup>
+                                <ListGroupItem color="success">Cras justo odio</ListGroupItem>
+                                <ListGroupItem color="info">Dapibus ac facilisis in</ListGroupItem>
+                                <ListGroupItem color="warning">Morbi leo risus</ListGroupItem>
+                                <ListGroupItem color="danger">Porta ac consectetur ac</ListGroupItem>
+                            </ListGroup>
+                        </Grid>
+                    </div>
+            )
+        }
     }
 
     // Use the ReactDOM.render to show your component on the browser
-    ReactDOM.render(<App/>, document.getElementById('root'))
+    ReactDOM.render(<ToDoApp/>, document.getElementById('root'))
 </script>
 
 
