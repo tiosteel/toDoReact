@@ -3,8 +3,8 @@ var express        = require('express'),
     methodOverride = require('method-override'),
     errorHandler   = require('errorhandler'),
     morgan         = require('morgan'),
-    routes         = require('./backend'),
-    api            = require('./backend/api');
+    routes         = require('./routes'),
+    api            = require('./routes/api');
 
 var app = module.exports = express();
 
@@ -35,4 +35,4 @@ app.post('/api/events', api.event);
 app.delete('/api/events/:eventId', api.event);
 
 app.listen(8080);
-console.log('Magic happens on http://localhost:8000...');
+console.log('Magic happens on http://localhost:8080...');
