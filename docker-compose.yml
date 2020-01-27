@@ -1,0 +1,67 @@
+version: '3'
+
+networks:
+  todo-network:
+
+services:
+#  mysql:
+#    build:
+#      context: ./mysql
+#    volumes:
+#    - ./mysql:/var/lib/mysql
+#    restart: always
+#    tty: true
+#    environment:
+#      MYSQL_ROOT_PASSWORD: someComplicatedPa$$w0rd!
+#      MYSQL_DATABASE: todo-app
+#      MYSQL_USER: SYSTEM
+#      MYSQL_PASSWORD: anotherComplicatedPa$$w0rd!
+#    networks:
+#      - todo-network
+
+  nginx:
+    depends_on:
+      - react
+      - php-fpm
+      - php-cli
+    build:
+      context: ./nginx
+    tty: true
+    ports:
+      - "8000:80"
+      - "8001:81"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./backend/app:/var/www/backend
+      - ./frontend:/var/www/frontend
+    networks:
+      - todo-network
+
+  php-cli:
+    build:
+      context: ./backend/env/php-cli
+    tty: true
+    volumes:
+      - ./backend/app:/var/www/backend
+    networks:
+      - todo-network
+
+  php-fpm:
+    build:
+      context: ./backend/env/php-fpm
+    tty: true
+    environment:
+      XDEBUG_CONFIG: remote_host=host.docker.internal
+    volumes:
+      - ./backend/app:/var/www/backend
+    networks:
+      - todo-network
+
+  react:
+    build:
+      context: frontend
+    tty: true
+    volumes:
+    - ./frontend:/var/www/frontend
+    networks:
+      - todo-network
