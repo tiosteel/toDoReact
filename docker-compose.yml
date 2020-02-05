@@ -4,23 +4,35 @@ networks:
   todo-network:
 
 services:
-#  mysql:
-#    build:
-#      context: ./mysql
-#    volumes:
-#    - ./mysql:/var/lib/mysql
-#    restart: always
-#    tty: true
-#    environment:
-#      MYSQL_ROOT_PASSWORD: someComplicatedPa$$w0rd!
-#      MYSQL_DATABASE: todo-app
-#      MYSQL_USER: SYSTEM
-#      MYSQL_PASSWORD: anotherComplicatedPa$$w0rd!
-#    networks:
-#      - todo-network
+  mysql:
+    build:
+      context: ./mysql
+    volumes:
+    - ./mysql:/var/www/mysql
+    tty: true
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: todo-app
+      MYSQL_USER: todo
+      MYSQL_PASSWORD: password
+    networks:
+      - todo-network
+
+  phpmyadmin:
+    depends_on:
+      - mysql
+    build:
+      context: ./backend/env/phpmyadmin
+    tty: true
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - todo-network
 
   nginx:
     depends_on:
+      - phpmyadmin
       - react
       - php-fpm
       - php-cli
@@ -30,10 +42,12 @@ services:
     ports:
       - "8000:80"
       - "8001:81"
+      - "8002:82"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./backend/app:/var/www/backend
       - ./frontend:/var/www/frontend
+      - ./mysql:/var/www/mysql
     networks:
       - todo-network
 
@@ -56,6 +70,16 @@ services:
       - ./backend/app:/var/www/backend
     networks:
       - todo-network
+
+  composer:
+    depends_on:
+      - php-fpm
+    build:
+      context: ./backend/env/composer
+    volumes:
+      - ./backend/app:/var/www/backend
+    tty: true
+    stdin_open: true
 
   react:
     build:
