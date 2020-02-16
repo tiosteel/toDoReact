@@ -1,10 +1,16 @@
 FROM node:12.14.1
 
-WORKDIR /var/www/frontend
-COPY ./package*.json ./
-RUN npm set strict-ssl false && npm install -g npm  && npm install
-COPY ./ ./
+WORKDIR /var/app/frontend
 
-EXPOSE 80
+COPY ./package*.json yarn.lock ./
+RUN yarn
 
-CMD [ "node", "server.js" ]
+ENV PATH /var/app/frontend/node_modules/.bin:$PATH
+
+ADD . /var/app/frontend/www
+WORKDIR /var/app/frontend/www
+
+EXPOSE 3000
+
+#RUN yarn build
+CMD yarn start

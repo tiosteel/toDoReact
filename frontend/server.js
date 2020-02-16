@@ -18,14 +18,14 @@ app.use(express.static(__dirname + '/'));
 app.use('/build', express.static('public'));
 
 var env = process.env.NODE_ENV;
-if ('development' == env) {
+if ('development' === env) {
     app.use(errorHandler({
         dumpExceptions: true,
         showStack: true
     }));
 }
 
-if ('production' == app.get('env')) {
+if ('production' === app.get('env')) {
     app.use(errorHandler());
 }
 

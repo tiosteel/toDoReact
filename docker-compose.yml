@@ -8,7 +8,7 @@ services:
     build:
       context: ./mysql
     volumes:
-    - ./mysql:/var/www/mysql
+    - ./mysql:/var/app/mysql
     tty: true
     environment:
       MYSQL_ROOT_PASSWORD: password
@@ -45,9 +45,9 @@ services:
       - "8002:82"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./backend/app:/var/www/backend
-      - ./frontend:/var/www/frontend
-      - ./mysql:/var/www/mysql
+      - ./backend/app/todolist:/var/app/backend
+      - ./frontend:/var/app/frontend/www
+      - ./mysql:/var/app/mysql
     networks:
       - todo-network
 
@@ -56,18 +56,20 @@ services:
       context: ./backend/env/php-cli
     tty: true
     volumes:
-      - ./backend/app:/var/www/backend
+      - ./backend/app/todolist:/var/app/backend
     networks:
       - todo-network
 
   php-fpm:
+    depends_on:
+      - mysql
     build:
       context: ./backend/env/php-fpm
     tty: true
     environment:
       XDEBUG_CONFIG: remote_host=host.docker.internal
     volumes:
-      - ./backend/app:/var/www/backend
+      - ./backend/app/todolist:/var/app/backend
     networks:
       - todo-network
 
@@ -77,7 +79,7 @@ services:
     build:
       context: ./backend/env/composer
     volumes:
-      - ./backend/app:/var/www/backend
+      - ./backend/app/todolist:/var/app/backend
     tty: true
     stdin_open: true
 
@@ -85,7 +87,9 @@ services:
     build:
       context: frontend
     tty: true
+    environment:
+      PORT: 80
     volumes:
-    - ./frontend:/var/www/frontend
+    - ./frontend:/var/app/frontend/www
     networks:
       - todo-network
