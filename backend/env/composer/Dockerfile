@@ -1,5 +1,5 @@
-FROM composer:2.0.11
+FROM composer:2.0
 
 WORKDIR /var/app/backend
 
-# CMD php artisan migrate && php artisan db:seed
+CMD exec /bin/sh -c "composer install && composer update && sleep 9999999999d & wait"

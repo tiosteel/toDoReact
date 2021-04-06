@@ -1,4 +1,4 @@
-version: '3'
+version: '3.5'
 
 networks:
   todo-network:
@@ -63,11 +63,14 @@ services:
   php-fpm:
     depends_on:
       - mysql
+    env_file:
+      - ./backend/env/php-fpm/.env
     build:
       context: ./backend/env/php-fpm
+      args:
+        APP_ENV: ${APP_ENV}
     tty: true
-    environment:
-      XDEBUG_CONFIG: remote_host=host.docker.internal
+    working_dir: /var/app/backend
     volumes:
       - ./backend/app/todolist:/var/app/backend
     networks:
