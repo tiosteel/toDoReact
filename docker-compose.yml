@@ -1,22 +1,22 @@
-version: '3.5'
+version: "3.5"
 
 networks:
   todo-network:
 
 services:
   mysql:
-    build:
-      context: ./mysql
     volumes:
-    - ./mysql:/var/app/mysql
-    tty: true
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: todo-app
-      MYSQL_USER: todo
-      MYSQL_PASSWORD: password
+      - ./mysql/data:/var/lib/mysql
     networks:
       - todo-network
+    tty: true
+    environment:
+      MYSQL_DATABASE: todo-app
+      MYSQL_USER: todo
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_PASSWORD: password
+    build:
+      context: ./mysql
 
   phpmyadmin:
     depends_on:
@@ -93,6 +93,6 @@ services:
     environment:
       PORT: 80
     volumes:
-    - ./frontend:/var/app/frontend/www
+      - ./frontend:/var/app/frontend/www
     networks:
       - todo-network
