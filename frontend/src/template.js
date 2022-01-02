@@ -1,5 +1,5 @@
 export default function template(title) {
-    let page = `
+  let page = `
         <!DOCTYPE html>
         <html lang="en">
             <head>
@@ -12,5 +12,5 @@ export default function template(title) {
             </body>
         </html>
       `;
-    return page;
+  return page;
 }

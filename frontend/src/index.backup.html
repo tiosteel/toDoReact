@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>React ToDo App</title>
 
     <!-- Import the React, React-Dom and Babel libraries from unpkg -->
@@ -15,28 +14,44 @@
     <!--src="https://unpkg.com/react-dom@latest/umd/react-dom.production.min.js"></script>-->
 
     <!--non-minified-->
-    <script type="application/javascript" src="https://unpkg.com/react@latest/umd/react.development.js"></script>
-    <script type="application/javascript"
-            src="https://unpkg.com/react-dom@latest/umd/react-dom.development.js"></script>
+    <script
+      type="application/javascript"
+      src="https://unpkg.com/react@latest/umd/react.development.js"
+    ></script>
+    <script
+      type="application/javascript"
+      src="https://unpkg.com/react-dom@latest/umd/react-dom.development.js"
+    ></script>
 
-    <script type="application/javascript" src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+    <script
+      type="application/javascript"
+      src="https://unpkg.com/babel-standalone@6.26.0/babel.js"
+    ></script>
 
     <!-- Import the Bootstrap component libraries from cloudflare -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.32.4/react-bootstrap.min.js"></script>
 
     <!-- Import latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous"
+    />
 
-    <link rel="shortcut icon" type="image/x-icon" media="all" href="../favicon.ico">
-</head>
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      media="all"
+      href="../favicon.ico"
+    />
+  </head>
 
+  <body>
+    <div id="root"></div>
 
-<body>
-<div id="root"></div>
-
-<script type="text/babel">
-    const Navbar = ReactBootstrap.Navbar,
+    <script type="text/babel">
+      const Navbar = ReactBootstrap.Navbar,
         Grid = ReactBootstrap.Grid,
         Row = ReactBootstrap.Row,
         Col = ReactBootstrap.Col,
@@ -46,150 +61,203 @@
         FormControl = ReactBootstrap.FormControl,
         Button = ReactBootstrap.Button;
 
-    class ToDoApp extends React.Component {
-
+      class ToDoApp extends React.Component {
         constructor(props, context) {
-            super(props, context);
+          super(props, context);
 
-            this.state = {
-                inputValue: "",
-                buttonDisabled: true,
-                currentTasks: JSON.parse(localStorage.getItem("currentTasks")) || []
-            }
+          this.state = {
+            inputValue: "",
+            buttonDisabled: true,
+            currentTasks:
+              JSON.parse(localStorage.getItem("currentTasks")) || [],
+          };
         }
 
         handleAddTaskInputChange(event) {
-            this.setState({
-                inputValue: event.target.value,
-                buttonDisabled: (event.target.value.length < 1)
-            });
+          this.setState({
+            inputValue: event.target.value,
+            buttonDisabled: event.target.value.length < 1,
+          });
         }
 
         handleAddTaskKeyUp(event) {
-            if (event.key === "Enter") {
-                this.handleAddTask();
-            }
+          if (event.key === "Enter") {
+            this.handleAddTask();
+          }
         }
 
         handleAddTask() {
-            if (this.state.inputValue.length > 0) {
-                const aCurrentTasks = this.state.currentTasks;
-                aCurrentTasks.unshift({
-                    name: this.state.inputValue,
-                    completed: false
-                });
-                this.setState({currentTasks: aCurrentTasks});
-                this.saveCurrentTasks();
+          if (this.state.inputValue.length > 0) {
+            const aCurrentTasks = this.state.currentTasks;
+            aCurrentTasks.unshift({
+              name: this.state.inputValue,
+              completed: false,
+            });
+            this.setState({ currentTasks: aCurrentTasks });
+            this.saveCurrentTasks();
 
-                this.handleAddTaskInputChange({target: {value: ""}});
-            }
+            this.handleAddTaskInputChange({ target: { value: "" } });
+          }
         }
 
-        saveCurrentTasks(){
-            localStorage.setItem("currentTasks", JSON.stringify(this.state.currentTasks));
+        saveCurrentTasks() {
+          localStorage.setItem(
+            "currentTasks",
+            JSON.stringify(this.state.currentTasks)
+          );
         }
 
         handleCompleteTask(iIndex, event) {
-            if (!this.state.currentTasks[iIndex].completed){
-                const aCurrentTasks = this.state.currentTasks;
-                aCurrentTasks[iIndex].completed = true;
+          if (!this.state.currentTasks[iIndex].completed) {
+            const aCurrentTasks = this.state.currentTasks;
+            aCurrentTasks[iIndex].completed = true;
 
-                const oSpliced = aCurrentTasks.splice(iIndex, 1);
-                aCurrentTasks.push(oSpliced[0]);
-                this.setState({currentTasks: aCurrentTasks});
+            const oSpliced = aCurrentTasks.splice(iIndex, 1);
+            aCurrentTasks.push(oSpliced[0]);
+            this.setState({ currentTasks: aCurrentTasks });
 
-                this.saveCurrentTasks();
-            }
+            this.saveCurrentTasks();
+          }
         }
 
-        handleRestoreTask(iIndex, event){
-            if (this.state.currentTasks[iIndex].completed){
-                const aCurrentTasks = this.state.currentTasks;
-                aCurrentTasks[iIndex].completed = false;
+        handleRestoreTask(iIndex, event) {
+          if (this.state.currentTasks[iIndex].completed) {
+            const aCurrentTasks = this.state.currentTasks;
+            aCurrentTasks[iIndex].completed = false;
 
-                const oSpliced = this.state.currentTasks.splice(iIndex, 1);
-                aCurrentTasks.unshift(oSpliced[0]);
-                this.setState({currentTasks: aCurrentTasks});
+            const oSpliced = this.state.currentTasks.splice(iIndex, 1);
+            aCurrentTasks.unshift(oSpliced[0]);
+            this.setState({ currentTasks: aCurrentTasks });
 
-                this.saveCurrentTasks();
-            }
+            this.saveCurrentTasks();
+          }
         }
 
-        handleDeleteTask(iIndex, event){
-            //@todo beauty raise confirm window
-            if (this.state.currentTasks[iIndex] && confirm("Are you sure?")) {
-                const aCurrentTasks = this.state.currentTasks;
-                aCurrentTasks.splice(iIndex, 1);
-                this.setState({currentTasks: aCurrentTasks});
+        handleDeleteTask(iIndex, event) {
+          //@todo beauty raise confirm window
+          if (this.state.currentTasks[iIndex] && confirm("Are you sure?")) {
+            const aCurrentTasks = this.state.currentTasks;
+            aCurrentTasks.splice(iIndex, 1);
+            this.setState({ currentTasks: aCurrentTasks });
 
-                this.saveCurrentTasks();
-            }
+            this.saveCurrentTasks();
+          }
         }
 
         render() {
-            return (
-                    <div>
-                        <Navbar bg="light" expanded="true">
-                            <Grid>
-                                <Col>
-                                    <Navbar.Header>
-                                        <Navbar.Brand>
-                                            <a href="/">
-                                                <img src="../public/Wiley-logo.png" width="20" height="20"
-                                                     alt="React Bootstrap logo"/>
-                                            </a>
-                                        </Navbar.Brand>
-                                        <Navbar.Brand>
-                                            <a href="/">React ToDo App</a>
-                                        </Navbar.Brand>
-                                    </Navbar.Header>
-                                    <Navbar.Collapse>
-                                        <Navbar.Form pullRight>
-                                            <FormGroup>
-                                                <FormControl
-                                                        type="text"
-                                                        value={this.state.inputValue}
-                                                        placeholder="Enter task"
-                                                        onChange={(event) => this.handleAddTaskInputChange(event)}
-                                                        onKeyUp={(event) => this.handleAddTaskKeyUp(event)}
-                                                />
-                                            </FormGroup>{' '}
-                                            <Button bsStyle="primary" disabled={this.state.buttonDisabled}
-                                                    onClick={(event) => this.handleAddTask(event)}>Add</Button>
-                                        </Navbar.Form>
-                                    </Navbar.Collapse>
-                                </Col>
-                            </Grid>
-                        </Navbar>
-                        <Grid>
-                            <ListGroup>
-                                {this.state.currentTasks.map((oTask, iIndex) =>
-                                        <ListGroupItem key={iIndex}>
-                                            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                                                <span style={{textDecoration: (oTask.completed) ? 'line-through' : 'None'}}>
-                                                    {oTask.name}
-                                                </span>
-                                                <span>
-                                                    <Button style={{display: (oTask.completed) ? 'None': 'Inline-block'}} bsStyle="success"
-                                                            onClick={(event) => this.handleCompleteTask(iIndex, event)}>Complete</Button>
-                                                    <Button style={{display: (oTask.completed) ? 'Inline-block': 'None'}} bsStyle="warning"
-                                                            onClick={(event) => this.handleRestoreTask(iIndex, event)}>Restore</Button>{' '}
-                                                    <Button bsStyle="danger" onClick={(event) => this.handleDeleteTask(iIndex, event)}>Delete</Button>
-                                                </span>
-                                            </div>
-                                        </ListGroupItem>
-                                )}
-                            </ListGroup>
-                        </Grid>
-                    </div>
-            )
+          return (
+            <div>
+              <Navbar bg="light" expanded="true">
+                <Grid>
+                  <Col>
+                    <Navbar.Header>
+                      <Navbar.Brand>
+                        <a href="/">
+                          <img
+                            src="../public/Wiley-logo.png"
+                            width="20"
+                            height="20"
+                            alt="React Bootstrap logo"
+                          />
+                        </a>
+                      </Navbar.Brand>
+                      <Navbar.Brand>
+                        <a href="/">React ToDo App</a>
+                      </Navbar.Brand>
+                    </Navbar.Header>
+                    <Navbar.Collapse>
+                      <Navbar.Form pullRight>
+                        <FormGroup>
+                          <FormControl
+                            type="text"
+                            value={this.state.inputValue}
+                            placeholder="Enter task"
+                            onChange={(event) =>
+                              this.handleAddTaskInputChange(event)
+                            }
+                            onKeyUp={(event) => this.handleAddTaskKeyUp(event)}
+                          />
+                        </FormGroup>{" "}
+                        <Button
+                          bsStyle="primary"
+                          disabled={this.state.buttonDisabled}
+                          onClick={(event) => this.handleAddTask(event)}
+                        >
+                          Add
+                        </Button>
+                      </Navbar.Form>
+                    </Navbar.Collapse>
+                  </Col>
+                </Grid>
+              </Navbar>
+              <Grid>
+                <ListGroup>
+                  {this.state.currentTasks.map((oTask, iIndex) => (
+                    <ListGroupItem key={iIndex}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <span
+                          style={{
+                            textDecoration: oTask.completed
+                              ? "line-through"
+                              : "None",
+                          }}
+                        >
+                          {oTask.name}
+                        </span>
+                        <span>
+                          <Button
+                            style={{
+                              display: oTask.completed
+                                ? "None"
+                                : "Inline-block",
+                            }}
+                            bsStyle="success"
+                            onClick={(event) =>
+                              this.handleCompleteTask(iIndex, event)
+                            }
+                          >
+                            Complete
+                          </Button>
+                          <Button
+                            style={{
+                              display: oTask.completed
+                                ? "Inline-block"
+                                : "None",
+                            }}
+                            bsStyle="warning"
+                            onClick={(event) =>
+                              this.handleRestoreTask(iIndex, event)
+                            }
+                          >
+                            Restore
+                          </Button>{" "}
+                          <Button
+                            bsStyle="danger"
+                            onClick={(event) =>
+                              this.handleDeleteTask(iIndex, event)
+                            }
+                          >
+                            Delete
+                          </Button>
+                        </span>
+                      </div>
+                    </ListGroupItem>
+                  ))}
+                </ListGroup>
+              </Grid>
+            </div>
+          );
         }
-    }
+      }
 
-    // Use the ReactDOM.render to show your component on the browser
-    ReactDOM.render(<ToDoApp/>, document.getElementById('root'))
-</script>
-
-</body>
-
+      // Use the ReactDOM.render to show your component on the browser
+      ReactDOM.render(<ToDoApp />, document.getElementById("root"));
+    </script>
+  </body>
 </html>
