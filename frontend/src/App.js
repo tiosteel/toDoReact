@@ -88,43 +88,39 @@ const App = () => {
     <div>
       <Navbar variant="light" bg="light" expanded="true">
         <Container>
-          <Col>
-            <Navbar.Brand>
-              <a href="/">
-                <img
-                  src="Wiley-logo.png"
-                  width="20"
-                  height="20"
-                  alt="React Bootstrap logo"
+          <Navbar.Brand>
+            <a href="/">
+              <img
+                src="Wiley-logo.png"
+                width="20"
+                height="20"
+                alt="React Bootstrap logo"
+              />
+            </a>
+          </Navbar.Brand>
+          <Navbar.Brand>
+            <a href="/">React ToDo App</a>
+          </Navbar.Brand>
+          <Navbar.Collapse className="justify-content-end">
+            <Form className="d-flex">
+              <FormGroup className="me-1">
+                <FormControl
+                  type="text"
+                  value={inputValue}
+                  placeholder="Enter task"
+                  onChange={(event) => handleAddTaskInputChange(event)}
+                  onKeyUp={(event) => handleAddTaskKeyUp(event)}
                 />
-              </a>
-            </Navbar.Brand>
-            <Navbar.Brand>
-              <a href="/">React ToDo App</a>
-            </Navbar.Brand>
-          </Col>
-          <Col>
-            <Navbar.Collapse>
-              <Form className="ml-auto" inline>
-                <FormGroup>
-                  <FormControl
-                    type="text"
-                    value={inputValue}
-                    placeholder="Enter task"
-                    onChange={(event) => handleAddTaskInputChange(event)}
-                    onKeyUp={(event) => handleAddTaskKeyUp(event)}
-                  />
-                </FormGroup>{" "}
-                <Button
-                  variant="primary"
-                  disabled={buttonDisabled}
-                  onClick={(event) => handleAddTask(event)}
-                >
-                  Add
-                </Button>
-              </Form>
-            </Navbar.Collapse>
-          </Col>
+              </FormGroup>{" "}
+              <Button
+                variant="primary"
+                disabled={buttonDisabled}
+                onClick={(event) => handleAddTask(event)}
+              >
+                Add
+              </Button>
+            </Form>
+          </Navbar.Collapse>
         </Container>
       </Navbar>
       <Container className="mt-3">
