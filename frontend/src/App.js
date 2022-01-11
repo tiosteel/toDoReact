@@ -86,92 +86,94 @@ const App = () => {
 
   return (
     <div>
-      <Navbar variant="light" bg="light" expanded="true">
-        <Container>
-          <Navbar.Brand>
-            <a href="/">
-              <img
-                src="Wiley-logo.png"
-                width="20"
-                height="20"
-                alt="React Bootstrap logo"
-              />
-            </a>
-          </Navbar.Brand>
-          <Navbar.Brand>
-            <a href="/">React ToDo App</a>
-          </Navbar.Brand>
-          <Navbar.Collapse className="justify-content-end">
-            <Form className="d-flex">
-              <FormGroup className="me-1">
-                <FormControl
-                  type="text"
-                  value={inputValue}
-                  placeholder="Enter task"
-                  onChange={(event) => handleAddTaskInputChange(event)}
-                  onKeyUp={(event) => handleAddTaskKeyUp(event)}
+      <React.StrictMode>
+        <Navbar variant="light" bg="light" expanded="true">
+          <Container>
+            <Navbar.Brand>
+              <a href="/">
+                <img
+                  src="Wiley-logo.png"
+                  width="20"
+                  height="20"
+                  alt="React Bootstrap logo"
                 />
-              </FormGroup>{" "}
-              <Button
-                variant="primary"
-                disabled={buttonDisabled}
-                onClick={(event) => handleAddTask(event)}
-              >
-                Add
-              </Button>
-            </Form>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-      <Container className="mt-3">
-        <ListGroup>
-          {currentTasks.map((oTask, iIndex) => (
-            <ListGroupItem key={iIndex}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <span
+              </a>
+            </Navbar.Brand>
+            <Navbar.Brand>
+              <a href="/">React ToDo App</a>
+            </Navbar.Brand>
+            <Navbar.Collapse className="justify-content-end">
+              <Form className="d-flex" onSubmit={(event) => event.preventDefault()}>
+                <FormGroup className="me-1">
+                  <FormControl
+                    type="text"
+                    value={inputValue}
+                    placeholder="Enter task"
+                    onChange={(event) => handleAddTaskInputChange(event)}
+                    onKeyUp={(event) => handleAddTaskKeyUp(event)}
+                  />
+                </FormGroup>{" "}
+                <Button
+                  variant="primary"
+                  disabled={buttonDisabled}
+                  onClick={(event) => handleAddTask(event)}
+                >
+                  Add
+                </Button>
+              </Form>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
+        <Container className="mt-3">
+          <ListGroup>
+            {currentTasks.map((oTask, iIndex) => (
+              <ListGroupItem key={iIndex}>
+                <div
                   style={{
-                    textDecoration: oTask.completed ? "line-through" : "None",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                   }}
                 >
-                  {oTask.name}
-                </span>
-                <span>
-                  <Button
+                  <span
                     style={{
-                      display: oTask.completed ? "None" : "Inline-block",
+                      textDecoration: oTask.completed ? "line-through" : "None",
                     }}
-                    variant="success"
-                    onClick={(event) => handleCompleteTask(iIndex, event)}
                   >
-                    Complete
-                  </Button>
-                  <Button
-                    style={{
-                      display: oTask.completed ? "Inline-block" : "None",
-                    }}
-                    variant="warning"
-                    onClick={(event) => handleRestoreTask(iIndex, event)}
-                  >
-                    Restore
-                  </Button>{" "}
-                  <Button
-                    variant="danger"
-                    onClick={(event) => handleDeleteTask(iIndex, event)}
-                  >
-                    Delete
-                  </Button>
-                </span>
-              </div>
-            </ListGroupItem>
-          ))}
-        </ListGroup>
-      </Container>
+                    {oTask.name}
+                  </span>
+                  <span>
+                    <Button
+                      style={{
+                        display: oTask.completed ? "None" : "Inline-block",
+                      }}
+                      variant="success"
+                      onClick={(event) => handleCompleteTask(iIndex, event)}
+                    >
+                      Complete
+                    </Button>
+                    <Button
+                      style={{
+                        display: oTask.completed ? "Inline-block" : "None",
+                      }}
+                      variant="warning"
+                      onClick={(event) => handleRestoreTask(iIndex, event)}
+                    >
+                      Restore
+                    </Button>{" "}
+                    <Button
+                      variant="danger"
+                      onClick={(event) => handleDeleteTask(iIndex, event)}
+                    >
+                      Delete
+                    </Button>
+                  </span>
+                </div>
+              </ListGroupItem>
+            ))}
+          </ListGroup>
+        </Container>
+      </React.StrictMode>
     </div>
   );
 };
