@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 // import Row from 'react-bootstrap/Row';
-import Col from "react-bootstrap/Col";
+// import Col from "react-bootstrap/Col";
 import ListGroup from "react-bootstrap/ListGroup";
 import ListGroupItem from "react-bootstrap/ListGroupItem";
 import FormGroup from "react-bootstrap/FormGroup";
@@ -16,9 +16,7 @@ import Form from "react-bootstrap/Form";
 const App = () => {
   const [inputValue, setInputValue] = React.useState("");
   const [buttonDisabled, setButtonDisabled] = React.useState(true);
-  const [currentTasks, setCurrentTasks] = React.useState(
-    JSON.parse(localStorage.getItem("currentTasks")) || []
-  );
+  const [currentTasks, setCurrentTasks] = React.useState([]);
 
   const handleAddTaskInputChange = (event) => {
     setInputValue(event.target.value);
