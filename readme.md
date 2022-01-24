@@ -4,7 +4,9 @@
 2. Run
    `docker-compose -f "docker-compose.yml" up -d --build`
 
-`php artisan migrate --seed --force` will be executed automatically 3. Launch
+`php artisan migrate --seed --force` will be executed automatically 
+
+3. Launch
 
 - http://localhost:8000 - frontend
 - http://localhost:8001 - API
