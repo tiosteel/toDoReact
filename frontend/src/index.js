@@ -1,13 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { unregister } from './serviceWorker';
+import express from 'express';
 
-import './index.css';
-import App from './components/App/App';
+let app = require('./server').default;
 
-ReactDOM.hydrate(<App />, document.getElementById('root'));
+if (module.hot) {
+  module.hot.accept('./server', () => {
+    console.log('Server reloading...');
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-unregister();
+    try {
+      app = require('./server').default;
+    } catch (error) {
+      console.dir(error);
+    }
+  });
+}
+
+express()
+  .use((req, res) => app.handle(req, res))
+  .listen(process.env.PORT || 3000, () => {
+    console.log(
+      `React SSR App is running: http://localhost:${process.env.PORT || 3000}`
+    );
+  });

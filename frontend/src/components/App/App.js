@@ -2,6 +2,8 @@ import React from "react";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
+import { Title } from "react-head";
+
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 // import Row from 'react-bootstrap/Row';
@@ -85,6 +87,7 @@ const App = () => {
   return (
     <div>
       <React.StrictMode>
+        <Title>ToDo task list</Title>
         <Navbar variant="light" bg="light" expanded="true">
           <Container>
             <Navbar.Brand>
@@ -101,7 +104,10 @@ const App = () => {
               <a href="/">React ToDo App</a>
             </Navbar.Brand>
             <Navbar.Collapse className="justify-content-end">
-              <Form className="d-flex" onSubmit={(event) => event.preventDefault()}>
+              <Form
+                className="d-flex"
+                onSubmit={(event) => event.preventDefault()}
+              >
                 <FormGroup className="me-1">
                   <FormControl
                     type="text"

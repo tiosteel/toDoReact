@@ -6,3 +6,9 @@
 .idea
 
 /mysql/data
+
+# development
+dist
+
+# production
+build

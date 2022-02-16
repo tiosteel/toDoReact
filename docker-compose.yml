@@ -92,6 +92,9 @@ services:
     tty: true
     environment:
       PORT: 80
+    expose:
+      - "9000:80"
+      - "9229:9229"
     volumes:
       - ./frontend:/var/app/frontend/www
     networks:
